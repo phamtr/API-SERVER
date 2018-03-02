@@ -9,10 +9,6 @@ const config = require('./config/databse');
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/oders');
 
-app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: false}));
-app.use(bodyParser.json());
-
 mongoose.Promise = global.Promise;
 mongoose.connect(config.uri, (err) =>{
     if(err){
@@ -22,6 +18,12 @@ mongoose.connect(config.uri, (err) =>{
         console.log('Connected to database: ' + config.db);
     }
 });
+
+
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.json());
+
 
 app.use(cors({
     origin: 'http://localhost:3000'
