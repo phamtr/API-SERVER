@@ -24,46 +24,10 @@ const upload = multer({ storage: storage, limits:{
     fileSize: 1024*1024*5
 }, fileFilter: fileFilter });
 const Product = require('../models/product');
+const productController = require('../controllers/products')
 
 
-router.get('/', (req, res, next) =>{
- Product.find()
- .select('name price _id productImage')
- .exec()
- .then(docs =>{
-     const response = {
-         count: docs.length,
-         products: docs.map(doc =>{
-             return {
-             name: doc.name,
-             price: doc.price,
-             productImage: doc.productImage,
-             _id: doc._id,
-             request: {
-                 type: 'GET',
-                 url: 'http://localhost:3000/products/' + doc._id
-             }
-
-         }
-         })
-     };
-//console.log(docs);
-//if(docs.length >= 0){
-    res.status(200).json(response);
-//}else{
-    res.status(404).json({
-        message: 'No entries found'
-    })
-//}
-
- })
- .catch(err =>{
-    console.log(err);
-    res.status(500).json({error: err});
-
-}); 
-
-});
+router.get('/', checkAuth, productController.products_get_all);
 
 router.post('/', checkAuth, upload.single('productImage'), (req, res, next) =>{
     console.log(req.file);
@@ -96,7 +60,7 @@ router.post('/', checkAuth, upload.single('productImage'), (req, res, next) =>{
             });                
            
 });
-router.get('/:productId', (req, res, next) =>{
+router.get('/:productId', checkAuth, (req, res, next) =>{
 const id = req.params.productId;
 Product.findById(id)
 .select('name price _id productImage')
@@ -123,7 +87,7 @@ Product.findById(id)
 }); 
 });
 
-router.patch('/:productId', (req, res, next) =>{
+router.patch('/:productId', checkAuth, (req, res, next) =>{
     const id = req.params.productId;
     const updateOps = {};
     for (ops of req.body){
@@ -150,7 +114,7 @@ router.patch('/:productId', (req, res, next) =>{
     
 
     });
-router.delete('/:productId', (req, res, next) =>{
+router.delete('/:productId', checkAuth, (req, res, next) =>{
     const id = req.params.productId;
     Product.remove({_id: id})
     .exec()

@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const config = require('../../config/databse');
 const jwt = require('jsonwebtoken');
 
+
 const User = require('../models/user');
 
 router.post('/signup', (req, res, next) =>{
