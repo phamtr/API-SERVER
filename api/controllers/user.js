@@ -45,6 +45,7 @@ exports.user_signup = (req, res, next) =>{
 }
 
 exports.user_login = (req, res, next) =>{
+  
     User.find({ email: req.body.email })
     .exec()
     .then(user =>{
