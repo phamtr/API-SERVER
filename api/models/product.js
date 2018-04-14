@@ -11,7 +11,7 @@ const productSchema = mongoose.Schema({
         createdBy: {type: String},
         CreatedAt: {type: Date, default: Date.now()},
         quantity: { type: Number, default: 1},
-        note: { type: String}
+        depart: { type: String}
     }]
 });
 
